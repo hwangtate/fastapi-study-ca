@@ -1,14 +1,13 @@
 from datetime import datetime
 from typing import Annotated
 
-from dependency_injector.wiring import inject, Provide
-from fastapi import HTTPException, Depends
+from dependency_injector.wiring import inject
+from fastapi import HTTPException
 from ulid import ULID
 
-from containers import Container
 from user.domain.repository.user_repo import IUserRepository
 from user.domain.user import User
-from user.infra.repository.user_repo import UserRepository
+
 from utils.crypto import Crypto
 
 
@@ -19,7 +18,9 @@ class UserService:
         self.ulid = ULID()
         self.crypto = Crypto()
 
-    def create_user(self, name: str, email: str, password: str):
+    def create_user(
+        self, name: str, email: str, password: str, memo: str | None = None
+    ):
         _user = None
 
         try:
@@ -37,6 +38,7 @@ class UserService:
             name=name,
             email=email,
             password=self.crypto.encrypt(password),
+            memo=memo,
             created_at=now,
             updated_at=now,
         )

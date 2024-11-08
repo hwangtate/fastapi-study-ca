@@ -8,6 +8,7 @@ class User:
     name: str
     email: str
     password: str
+    memo: str | None
     created_at: datetime
     updated_at: datetime
 
